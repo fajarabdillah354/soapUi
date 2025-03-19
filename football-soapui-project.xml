@@ -2110,11 +2110,63 @@ count(//m:sName)</path><content>2109</content><allowWildcards>false</allowWildca
    <soapenv:Header/>\r
    <soapenv:Body>\r
       <foot:Countries>\r
-         <foot:sCountryName>Canada</foot:sCountryName>\r
+         <foot:sCountryName>${#TestCase#countryName}</foot:sCountryName>\r
       </foot:Countries>\r
    </soapenv:Body>\r
 </soapenv:Envelope>]]></con:request><con:assertion type="Simple Contains" id="d82407cb-f6d3-403b-8322-717d7896e172" name="Contains"><con:configuration><token>Canada</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>No Authorization</con:selectedAuthProfile><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="https://footballpool.dataaccess.eu/InfoSoapType/CountriesRequest" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="groovy" name="Groovy Script" id="79c8b795-d8ee-46f0-83e9-b2606bbe007e"><con:settings/><con:config><script>log.info "Hello World..."
 
 def name =  context.expand('${#Project#msg}')
 
-log.info("Properties name is : " + name)</script></con:config></con:testStep><con:properties><con:property><con:name>CountryName</con:name><con:value>CA</con:value></con:property></con:properties></con:testCase><con:properties><con:property><con:name>Countries</con:name><con:value>CA</con:value></con:property></con:properties></con:testSuite><con:properties><con:property><con:name>msg</con:name><con:value>this is project level msg</con:value></con:property></con:properties><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+log.info("Properties name is : " + name)
+
+log.info context.expand('${#Project#msg}')
+
+log.info context.expand('${#TestSuite#msg}')
+
+log.info context.expand('${#TestCase#msg}')
+
+log.info context.expand('${#Properties#msg}')
+
+a = 20
+b = 2
+c = a/b
+log.info(" result this operation is : " +c)</script></con:config></con:testStep><con:testStep type="properties" name="Properties" id="09d39e96-e80e-4d8f-bada-2125f57b12b8"><con:settings/><con:config xsi:type="con:PropertiesStep" saveFirst="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:properties><con:property><con:name>msg</con:name><con:value>this test case step level</con:value></con:property></con:properties></con:config></con:testStep><con:testStep type="groovy" name="Hello" id="594ad398-929b-4c18-9c61-48e9e7cece10"><con:settings/><con:config><script>class Hello{
+
+	def log;
+	def context;
+	def testRunner;
+
+	def Hello(log, context, testRunner){
+		this.log = log
+		this.context = context
+		this.testRunner = testRunner
+	}
+
+	def sayHello(){
+			log.info ("saying hello");
+	}
+
+	
+	def sayHello(String name){
+			log.info (" hello " + name);
+	}
+	
+}
+
+context.setProperty("Hello", new Hello(log, context, testRunner));</script></con:config></con:testStep><con:testStep type="groovy" name="CallHello" id="6cdb7da2-aae6-4b8e-8cdf-11967ea79407"><con:settings/><con:config><script>def teststep = testRunner.testCase.getTestStepByName("Hello")
+
+teststep.run(testRunner, context)
+context.Hello.sayHello()
+context.Hello.sayHello("fajar")</script></con:config></con:testStep><con:properties><con:property><con:name>msg</con:name><con:value>this is test case level</con:value></con:property><con:property><con:name>countryName</con:name><con:value>Canada</con:value></con:property></con:properties></con:testCase><con:properties><con:property><con:name>msg</con:name><con:value>this is suite level msg</con:value></con:property></con:properties></con:testSuite><con:testSuite id="1bd6bf37-5e66-4dc7-a3b5-b311e6331ef5" name="StadiumTestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="11d3a6e9-d103-4ec3-92d7-f8e2bf1c21f0" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="InfoSoapBinding TestSuite" searchProperties="true"><con:settings/><con:testStep type="request" id="3a86bf8a-62f4-4a27-bb3d-5c08d8206692" name="StadiumInfo"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>InfoSoapBinding</con:interface><con:operation>StadiumInfo</con:operation><con:request name="StadiumInfo" id="ac1440fc-43e5-4b33-9b63-408033dfbb8a"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://ws.footballpool.dataaccess.eu/info.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:foot="https://footballpool.dataaccess.eu">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <foot:StadiumInfo>
+         <foot:sStadiumName/>
+      </foot:StadiumInfo>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="https://footballpool.dataaccess.eu/InfoSoapType/StadiumInfoRequest" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="transfer" name="Property Transfer" id="588c808d-9049-49ee-bdc9-dd4014b2fb58"><con:settings/><con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" entitize="false" transferChildNodes="false"><con:name>pt</con:name><con:sourceType>Response</con:sourceType><con:sourceStep>StadiumNames</con:sourceStep><con:sourcePath>//*:string[3]</con:sourcePath><con:targetType>Request</con:targetType><con:targetStep>StadiumInfo</con:targetStep><con:targetPath>//*:sStadiumName</con:targetPath><con:upgraded>true</con:upgraded></con:transfers></con:config></con:testStep><con:testStep type="request" id="25a49b2e-9223-40a3-96f6-ba78e4a8eea0" name="StadiumNames"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>InfoSoapBinding</con:interface><con:operation>StadiumNames</con:operation><con:request name="StadiumNames" id="33c27c06-884f-44ae-b8f7-bc5d97d6ec6d"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://ws.footballpool.dataaccess.eu/info.wso</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:foot="https://footballpool.dataaccess.eu">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <foot:StadiumNames/>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig action="https://footballpool.dataaccess.eu/InfoSoapType/StadiumNamesRequest" mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties><con:property><con:name>msg</con:name><con:value>this is project level msg</con:value></con:property></con:properties><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
